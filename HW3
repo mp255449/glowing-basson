@@ -1,0 +1,71 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+G = 6.67430*10**(-11) # m3 kg-1 s-2
+k = 1.38*10**-23 #J/K
+hyd = 1.67*10**-27 #kg
+
+titanm = 2.3452*10**23 #kg
+marsm = 6.39*10**23 #kg
+venusm = 4.867*10**24 #kg
+
+titanr = 2.5747*10**6 #m
+marsr = 3.3895 *10**6 #m
+venusr = 6.0518*10**6 #m
+
+def gravity(M, r):
+    f_g = (G*M)/r**2
+    return f_g
+
+def Scale_H(g, mu, T):
+    return ((1.38*10**-23)*T)/((mu)*(1.67*10**-27)*(g))
+
+titan = Scale_H(1.3544, 27.4, 80)
+mars = Scale_H(3.7, 42.69, 210)
+venus = Scale_H(8.8695, 43.44, 700)
+
+def P_Pnaught(z, h):
+    return np.exp(-z/h)
+
+height = np.arange(100000)
+titanp = P_Pnaught(height, titan)
+marsp = P_Pnaught(height, mars)
+venusp = P_Pnaught(height, venus)
+earthp = P_Pnaught(height, 8500)
+
+plt.plot(titanp, height, '--r')
+plt.plot(marsp, height, '--b')
+plt.plot(venusp, height, '--g')
+plt.plot(earthp, height, '--k')
+plt.xlabel('Pressure/Pressure_naught')
+plt.ylabel('height')
+
+T = 1000 #K
+def ave_v(mu):
+    return print((np.sqrt(3*k*T/(mu*hyd))))
+
+C0_2 = ave_v(44)
+N_2 = ave_v(28)
+H_2 = ave_v(2)
+
+T = 390 #K
+
+C0_2 = ave_v(44)
+N_2 = ave_v(28)
+H_2 = ave_v(2)
+
+earthm = 5.97*10**24 #kg
+moonm = 7.34767309*10**22 #kg
+jupiterm = 1.898*10**27 #kg
+
+earthr = 6400000 #m
+moonr = 1.7371*10**6 #m
+jupiterr = 69.911*10**6 #m
+
+v_esc_earth = np.sqrt(2*G*earthm/(earthr + 500000))
+v_esc_moon = np.sqrt(2*G*moonm/(moonr + 500000))
+v_esc_jupiter = np.sqrt(2*G*jupiterm/(jupiterr + 500000))
+
+print(v_esc_earth)
+print(v_esc_moon)
+print(v_esc_jupiter)
