@@ -1,5 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy as scipy
+from scipy.integrate import quad
+import math as math
+
+def integrand(x, a):
+    return (4*math.pi*a*x**2)
 
 r = np.array([0, 200, 400, 600, 800, 1000, 1200, 1221.5, 1221.5, 1400, 1600, 1800, 
      2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400, 3480, 3480, 3600,
@@ -14,5 +20,18 @@ bulk = np.zeros(37) + 5500
 plt.plot(r, d)
 plt.plot(r, bulk, '--')
 
-plt.ylabel('density kg/m^3')
-plt.xlabel('radius km')
+plt.title('Density as a Function of r')
+plt.ylabel('density [kg/m^3]')
+plt.xlabel('radius [km]')
+
+f = scipy.interpolate.interp1d(d, r)
+d_new = (13090, 0, 1)
+r_new = f(d_new)
+
+r_bulk = scipy.interpolate.interp1d.__call__(f, 5493.2)
+print(r_bulk)
+
+a = 
+r = 6731*10**3
+result = scipy.integrate.quad(integrand, 0, r, args=(a))
+print(result)
