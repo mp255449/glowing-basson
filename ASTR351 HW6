@@ -1,0 +1,99 @@
+import math
+
+#Question 1(a-d)
+
+σ = 5.67*10**-8 #[W/(m^2K^4)]  SB constant
+r_sun = 696.34*10**6 #[m]  radius of sun
+r_jup = 69.911*10**6 #[m]  radius of jupiter
+r_earth = 6.371*10**6 #[m]  radius of earth
+d_jup_sun = 767.56*10**9 #[m]  distance from sun to jupiter
+d_earth_sun = 149.78*10**9 #[m]  distance from sun to earth
+f_earth_int = 8*10**-2 #[W/m^2]  flux of earth due to internal heat
+
+def luminosity(r, T):
+    return ((4)*(math.pi)*(r**2)*(σ)*(T**4)) #IR luminosity
+
+def lum_reflect(F, r, α):
+    return ((F)*(math.pi)*(r**2)*(1-α)) #reflected solar luminosity
+
+def lum_int(F, r):
+    return ((F)*(4)*(math.pi)*(r**2)) #internal heat luminosity
+
+def flux(r, L):
+    return ((L)/((4)*(math.pi)*(r**2))) #basic flux
+
+l_sun = luminosity(r_sun, 5778) #sun's luminosity
+
+l_jup_eff = luminosity(r_jup, 124) #jupiter's luminosity measured 
+
+l_jup_eq = luminosity(r_jup, 113) #jupiter's expected luminosity
+
+f_earth_sun = flux(d_earth_sun, l_sun) #flux of sun at earth
+
+l_earth_IR = luminosity(r_earth, 288) #earth's thermal luminosity
+
+l_earth_reflect = lum_reflect(f_earth_sun, r_earth, .3) #earth's reflected solar luminosity
+
+l_earth_int = lum_int(f_earth_int, r_earth) #earth's internal heat luminosity
+
+l_multiple = l_earth_reflect / l_earth_int
+
+l_jup_int = l_jup_eff - l_jup_eq #jupiter's internal heat luminosity
+print('\nThe internal luminosity of Jupiter is', l_jup_int, '[W]')
+
+f_jup_int = flux(r_jup, l_jup_int) #jupiter's intrnal heat flux
+print('\nThe flux at jupiter\'s surface due to internal heating is', f_jup_int, '[W/m^2]')
+
+f_jup_sun = flux(d_jup_sun, l_sun) #sun's flux at jupiter
+print('\nThe flux at jupiter due to the sun is', f_jup_sun, '[W/m^2]')
+
+print('\nThe earth\'s luminosity due to reflected sun light is', l_earth_reflect, '[W]')
+print('The earth\'s luminosity due to IR radiation is', l_earth_IR, '[W]')
+print('The earth\'s luminosity due to internal heat is', l_earth_int, '[W]')
+print('The earth\'s luminosity due to reflected sun light over internal heat is', l_multiple)
+
+
+#Question 2(a-b)
+
+v_earth_tot = (4/3)*(math.pi)*(r_earth**3) #[m^3] volume of earth
+m_earth = 5.972*10**24 #[kg] mass of earth
+v_earth_crust = .01*(v_earth_tot) #[m^3] volume of earth's crust
+ρ_earth_bulk = 5500 #[kg/m^3] bulk density of earth
+ρ_earth_crust = 2600 #[kg/m^3] density of earth's crust
+ρ_earth_mantle = 4400 #[kg/m^3] density of earth's mantle
+ρ_earth_core = 11000 #[kg/m^3] density of earth's core
+m_earth_crust = (v_earth_crust)*(ρ_earth_crust) #[kg] mass of earth's crust
+
+#algebra done in picture attached to homework file
+
+c = m_earth - m_earth_crust #constant to make algebra easier
+v_earth_mantle = (c - .99*(v_earth_tot)*(ρ_earth_core))/((ρ_earth_mantle - ρ_earth_core)) #volume of earth's mantle
+v_earth_core = .99*(v_earth_tot) - v_earth_mantle #volume of earth's core
+
+print('\n% of mantle volume to total earth volume is', ((v_earth_mantle)/(v_earth_tot))*100)
+print('% of core volume to total earth volume is', ((v_earth_core)/(v_earth_tot))*100, '\n')
+print('% of mantle mass to total earth mass is', (((v_earth_mantle)*(ρ_earth_mantle))/(m_earth))*100)
+print('% of core mass to total earth mass is', (((v_earth_core)*(ρ_earth_core))/(m_earth))*100)
+
+ρ_earth_bulk = ((m_earth_crust) + (v_earth_mantle)*(ρ_earth_mantle) + (v_earth_core)*(ρ_earth_core))/(v_earth_tot)
+print('\nEarth\'s Bulk Density:', ρ_earth_bulk, '[kg/m^3]')
+
+
+#Question 2(c)
+
+e_U = 9.8*10**-5 #[W/kg] energy generation rate of Uranium
+e_Th = 2.6*10**-5 #[W/kg] energy generation rate of Thorium
+e_K = 3.5*10**-9 #[W/kg] energy generation rate of Potassium
+
+m_mantle_crust = m_earth_crust + (v_earth_mantle)*(ρ_earth_mantle)
+m_U = m_mantle_crust*(20/1000000000) #[kg] mass of Uranium in earth
+m_Th = m_mantle_crust*(100/1000000000) #[kg] mass of Thorium in earth
+m_K = m_mantle_crust*(200/1000000) #[kg] mass of Potassium in earth
+
+l_U = m_U * e_U #[W] luminosity due to Uranium
+l_Th = m_Th * e_Th #[W] luminosity due to Thorium
+l_K = m_K * e_K #[W] luminosity due to Potassium
+
+l_nuclear = l_U + l_Th + l_K #[W] luminosity due to nuclear decays
+print('luminosity due to U, Th, and K nuclear decay compared to '
+      'the calculated internal luminosity from a heat source in the earth is', l_nuclear/l_earth_int)
